@@ -1,0 +1,25 @@
+{
+  "name": "ticketsystem",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev:api": "npm run start:dev --prefix apps/api",
+    "dev:admin": "npm run dev --prefix apps/admin",
+    "openapi:generate": "npm run openapi:generate --prefix apps/api",
+    "lint:api": "npm run lint --prefix apps/api",
+    "lint:admin": "npm run lint --prefix apps/admin",
+    "test:api": "npm run test --prefix apps/api"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JVEbri/TicketSystem.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JVEbri/TicketSystem/issues"
+  },
+  "homepage": "https://github.com/JVEbri/TicketSystem#readme",
+  "description": ""
+}

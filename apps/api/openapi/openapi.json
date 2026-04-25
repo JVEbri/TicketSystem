@@ -1,0 +1,316 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "AppController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/tickets": {
+      "post": {
+        "operationId": "TicketsController_createTicket",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Crear un ticket (público)",
+        "tags": [
+          "Tickets"
+        ]
+      }
+    },
+    "/admin/tickets": {
+      "get": {
+        "operationId": "TicketsController_listTickets",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "OPEN",
+                "IN_PROGRESS",
+                "RESOLVED",
+                "CLOSED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "priority",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "URGENT"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TicketDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Listar tickets (admin)",
+        "tags": [
+          "Tickets"
+        ]
+      }
+    },
+    "/admin/tickets/{id}": {
+      "get": {
+        "operationId": "TicketsController_getTicket",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Obtener un ticket por id (admin)",
+        "tags": [
+          "Tickets"
+        ]
+      }
+    },
+    "/admin/tickets/{id}/status": {
+      "patch": {
+        "operationId": "TicketsController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTicketStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Actualizar estado de un ticket (admin)",
+        "tags": [
+          "Tickets"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Ticket System API",
+    "description": "",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateTicketDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "No puedo iniciar sesión"
+          },
+          "description": {
+            "type": "string",
+            "example": "Al intentar entrar, me da error 500"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "URGENT"
+            ],
+            "example": "MEDIUM"
+          },
+          "reporterUser": {
+            "type": "string",
+            "example": "juan"
+          },
+          "reporterEmail": {
+            "type": "string",
+            "example": "juan@empresa.com"
+          },
+          "reporterOrg": {
+            "type": "string",
+            "example": "Empresa S.L."
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "TicketDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "6d4b6f07-9b78-4ef3-9cbe-c278e5f9db1b"
+          },
+          "title": {
+            "type": "string",
+            "example": "No puedo iniciar sesión"
+          },
+          "description": {
+            "type": "object",
+            "example": "Al intentar entrar, me da error 500"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "IN_PROGRESS",
+              "RESOLVED",
+              "CLOSED"
+            ],
+            "example": "OPEN"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "URGENT"
+            ],
+            "example": "MEDIUM"
+          },
+          "reporterUser": {
+            "type": "object",
+            "example": "juan"
+          },
+          "reporterEmail": {
+            "type": "object",
+            "example": "juan@empresa.com"
+          },
+          "reporterOrg": {
+            "type": "object",
+            "example": "Empresa S.L."
+          },
+          "assignedAgentId": {
+            "type": "object",
+            "example": "agent-123"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-04-25T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-04-25T10:05:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status",
+          "priority",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateTicketStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "IN_PROGRESS",
+              "RESOLVED",
+              "CLOSED"
+            ],
+            "example": "IN_PROGRESS"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      }
+    }
+  }
+}
