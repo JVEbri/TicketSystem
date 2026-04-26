@@ -5,6 +5,9 @@ export class TicketDto {
   @ApiProperty({ example: '6d4b6f07-9b78-4ef3-9cbe-c278e5f9db1b' })
   id!: string;
 
+  @ApiProperty({ example: 1 })
+  reference!: number;
+
   @ApiProperty({ example: 'No puedo iniciar sesión' })
   title!: string;
 

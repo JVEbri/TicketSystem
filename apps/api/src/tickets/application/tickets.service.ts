@@ -1,9 +1,16 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { TicketPriority, TicketStatus } from '../domain/ticket.enums';
+import { InvalidStatusTransitionError } from '../domain/errors/ticket.errors';
 import {
   CreateTicketInput,
   TICKETS_REPOSITORY,
-  TicketsListFilter,
+  TicketsListOptions,
+  TicketsListResult,
 } from './ports/tickets-repository';
 import type { TicketsRepository } from './ports/tickets-repository';
 
@@ -17,8 +24,8 @@ export class TicketsService {
     return this.ticketsRepo.create(input);
   }
 
-  listTickets(filter: TicketsListFilter) {
-    return this.ticketsRepo.findMany(filter);
+  listTickets(options: TicketsListOptions): Promise<TicketsListResult> {
+    return this.ticketsRepo.findMany(options);
   }
 
   async getTicket(id: string) {
@@ -33,8 +40,8 @@ export class TicketsService {
     try {
       return await this.ticketsRepo.updateStatus(id, status);
     } catch (err) {
-      if (err instanceof Error && err.message === 'NOT_FOUND') {
-        throw new NotFoundException('Ticket not found');
+      if (err instanceof InvalidStatusTransitionError) {
+        throw new BadRequestException(err.message);
       }
       throw err;
     }
